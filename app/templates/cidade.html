@@ -1,3 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+
 <div class="container mt-5">
     <h2>Cidades</h2>
     <ul class="list-group">
@@ -5,4 +9,6 @@
         <li class="list-group-item">{{ cidade.nome }}</li>
         {% endfor %}
     </ul>
+    
 </div>
+{% endblock %}
