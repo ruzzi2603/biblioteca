@@ -1,65 +1,85 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import *
-from django.views import View
-from django.shortcuts import redirect, get_object_or_404
 from django.views import View
 from django.contrib import messages
-from .models import Livro
+from .models import *
+from .forms import LivroForm
 
 
 class IndexView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         return render(request, 'index.html')
 
 
 class LivrosView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         livros = Livro.objects.all()
         return render(request, 'livros.html', {'livros': livros})
 
-    def post(self, request, *args, **kwargs):
-        # Aqui você deve implementar a lógica do POST
-        # Exemplo: criar um novo livro ou processar formulário
-        pass
-
-
-class EmprestimoView(View):
-    def get(self, request, *args, **kwargs):
-        reservas = Emprestimo.objects.all()
-        return render(request, 'reserva.html', {'reservas': reservas})
-
 
 class CidadesView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         cidades = Cidade.objects.all()
         return render(request, 'cidade.html', {'cidades': cidades})
 
 
 class AutoresView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         autores = Autor.objects.all()
         return render(request, 'autor.html', {'autores': autores})
 
 
 class EditorasView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         editoras = Editora.objects.all()
         return render(request, 'editora.html', {'editoras': editoras})
 
 
 class LeitoresView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         leitores = Leitor.objects.all()
         return render(request, 'leitor.html', {'leitores': leitores})
 
 
 class GenerosView(View):
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         generos = Genero.objects.all()
         return render(request, 'genero.html', {'generos': generos})
+
+
 class DeleteLivroView(View):
-    def get(self, request, id, *args, **kwargs):
-        livro = get_object_or_404(Livro, id=id)
+    def get(self, request, id):
+        livro = Livro.objects.get(id=id)
         livro.delete()
-        messages.success(request, 'Livro excluído com sucesso!')
+        messages.success(request, "Livro excluído com sucesso")
         return redirect('livros')
+class ReservasView(View):
+    template_name = 'reserva.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+class EditarLivroView(View):
+
+    def get(self, request, id):
+        livro = get_object_or_404(Livro, id=id)
+        form = LivroForm(instance=livro)
+
+        return render(request, 'editar_livro.html', {
+            'livro': livro,
+            'form': form
+        })
+
+    def post(self, request, id):
+
+        livro = get_object_or_404(Livro, id=id)
+        form = LivroForm(request.POST, instance=livro)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Livro atualizado")
+            return redirect('editar', id=id)
+
+        return render(request, 'editar_livro.html', {
+            'livro': livro,
+            'form': form
+        })

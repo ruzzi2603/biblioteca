@@ -1,90 +1,55 @@
 from django.db import models
 
 class Cidade(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome da cidade")
-    uf = models.CharField(max_length=2, verbose_name="UF")
+    nome = models.CharField(max_length=100)
+    uf = models.CharField(max_length=2)
 
     def __str__(self):
-        return f"{self.nome}, {self.uf}"
-
-    class Meta:
-        verbose_name = "Cidade"
-        verbose_name_plural = "Cidades"
+        return f"{self.nome} - {self.uf}"
 
 
 class Autor(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome do autor")
-    cidade = models.ForeignKey(Cidade, on_delete=models.CASCADE, verbose_name="Cidade do autor")
+    nome = models.CharField(max_length=100)
+    cidade = models.ForeignKey(Cidade, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nome
-
-    class Meta:
-        verbose_name = "Autor"
-        verbose_name_plural = "Autores"
 
 
 class Editora(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome da editora")
-    site = models.CharField(max_length=100, verbose_name="Site da editora")
-    cidade = models.ForeignKey(Cidade, on_delete=models.CASCADE, verbose_name="Cidade da editora")
+    nome = models.CharField(max_length=100)
+    site = models.CharField(max_length=100)
+    cidade = models.ForeignKey(Cidade, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nome
-
-    class Meta:
-        verbose_name = "Editora"
-        verbose_name_plural = "Editoras"
-
-
-class Leitor(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome do leitor")
-    email = models.CharField(max_length=100, verbose_name="Email do leitor")
-    cpf = models.CharField(max_length=11, unique=True, verbose_name="CPF do leitor")
-
-    def __str__(self):
-        return self.nome
-
-    class Meta:
-        verbose_name = "Leitor"
-        verbose_name_plural = "Leitores"
 
 
 class Genero(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Gênero")
+    nome = models.CharField(max_length=100)
 
     def __str__(self):
         return self.nome
 
-    class Meta:
-        verbose_name = "Gênero"
-        verbose_name_plural = "Gêneros"
+
+class Leitor(models.Model):
+    nome = models.CharField(max_length=100)
+    email = models.EmailField()
+    cpf = models.CharField(max_length=11, unique=True)
+
+    def __str__(self):
+        return self.nome
 
 
 class Livro(models.Model):
-    nome = models.CharField(max_length=100, verbose_name="Nome do livro")
-    autor = models.ForeignKey(Autor, on_delete=models.CASCADE, verbose_name="Autor do livro")
-    editora = models.ForeignKey(Editora, on_delete=models.CASCADE, verbose_name="Editora do livro")
-    genero = models.ForeignKey(Genero, on_delete=models.CASCADE, verbose_name="Gênero do livro")
-    preco = models.IntegerField(verbose_name="Preço do livro")
+    nome = models.CharField(max_length=100)
+    autor = models.ForeignKey(Autor, on_delete=models.CASCADE)
+    editora = models.ForeignKey(Editora, on_delete=models.CASCADE)
+    genero = models.ForeignKey(Genero, on_delete=models.CASCADE)
+
+    preco = models.IntegerField()
     data_pub = models.DateField(verbose_name="Data de publicação do livro")
-    status = models.BooleanField(verbose_name="Status do livro")
+    status = models.BooleanField()
 
     def __str__(self):
-        return f"{self.nome}, {self.autor}"
-
-    class Meta:
-        verbose_name = "Livro"
-        verbose_name_plural = "Livros"
-class Emprestimo(models.Model):
-    livro = models.ForeignKey(Livro, on_delete=models.CASCADE, verbose_name="Livro emprestado")
-    leitor = models.ForeignKey(Leitor, on_delete=models.CASCADE, verbose_name="Leitor")
-    data_reserva = models.DateField(verbose_name="Data da reserva")
-    data_devolucao = models.DateField(null=True, blank=True, verbose_name="Data da devolução")
-
-    def __str__(self):
-        return f"{self.livro.nome} - {self.leitor.nome}"
-
-    class Meta:
-        verbose_name = "Empréstimo"
-        verbose_name_plural = "Empréstimos"
+        return self.nome

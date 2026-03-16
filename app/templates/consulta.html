@@ -1,0 +1,10 @@
+<div class="container mt-5">
+    <h2>Consulta de Livros</h2>
+    <ul class="list-group">
+        {% for livro in livros %}
+        <li class="list-group-item">
+            {{ livro.nome }} - {{ livro.autor }} ({{ livro.editora }})
+        </li>
+        {% endfor %}
+    </ul>
+</div>

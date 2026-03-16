@@ -1,0 +1,23 @@
+<div class="container mt-5">
+    <h2>Reservas / Empréstimos</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Livro</th>
+                <th>Leitor</th>
+                <th>Data Empréstimo</th>
+                <th>Data Devolução</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reserva in reservas %}
+            <tr>
+                <td>{{ reserva.livro.nome }}</td>
+                <td>{{ reserva.leitor.nome }}</td>
+                <td>{{ reserva.data_emprestimo }}</td>
+                <td>{{ reserva.data_devolucao }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
